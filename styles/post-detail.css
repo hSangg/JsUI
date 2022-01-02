@@ -1,0 +1,52 @@
+
+.post-detail-nav{
+  background: black;
+}
+
+section.hero {
+  height: 300px;
+  background: #eee;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+}
+
+.post-detail .post-detail-main {
+  margin-top: -4rem;
+  padding: 2rem;
+  border-radius: .25rem;
+  background-color: white;
+  
+}
+
+.post-detail .post-title-wrapper {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+
+.post-detail .post-image {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.button{
+  background: white;
+  border: 2px solid black;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+
+  min-width: 90px;
+  
+
+}
+
+.button.secondary{
+  background: rgb(90, 90, 255);
+  border: none;
+  color: white;
+  border: rgb(90, 90, 255) 2px solid;
+}
+

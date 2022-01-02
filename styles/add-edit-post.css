@@ -1,0 +1,44 @@
+.add-edit-nav{
+    padding: 0;
+    background: rgb(29, 29, 29);
+}
+
+.add-edit-post-form{
+    background: #1b222c !important;
+}
+
+#postDetailTitle{
+    font-weight: 500;
+    color: white;
+}
+.form-control{
+    background: #1b222c !important;
+    outline: none;
+    border: 1px solid rgba(150, 150, 150, 0.438);
+    color: white !important;
+}
+
+.change-image{
+    display: inline-block;
+    background: rgba(76, 76, 255, 0.226);
+    padding: 0.1rem 0.2rem;
+    font-size: 1rem;
+
+    color: rgb(129, 129, 255);
+    border-bottom: 2px rgba(84, 0, 219, 0.685) solid;
+    cursor: pointer;
+
+}
+.change-image:hover{
+    filter: brightness(1.5);
+}
+.form-group a{
+    text-decoration: none;
+    color: rgb(87, 87, 255);
+}
+
+label{
+    color: rgb(202, 202, 202);
+    font-size: 1.2rem;
+    margin-bottom: 0.1rem;
+}
