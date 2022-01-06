@@ -156,15 +156,23 @@
   z-index: 1;
 
 }
+.carousel-inner{
+  height: 100%;
+}
+
+.carousel-item {
+  height: 100%;
+}
 
 .slider-wapper__text{
-  position: absolute;
-  z-index: 1;
-  top: 0;
-
-  margin-top: 7.5rem;
-  
-  
+  height: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.slider-wapper__text h5{
+  margin-top: 3rem;
 }
 
 .slider-wapper .carousel-item img{

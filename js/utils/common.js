@@ -14,6 +14,19 @@ export function setTextContent(parent, child, text) {
 }
 
 
+export function setValue(form, field, value) {
+    if (!parent) return
+    const element = form.querySelector(field)
+    if (element) element.value = value
+}
+
+export function setBackgroundImage(parent, child, backgroundUrl) {
+    if (!parent) return
+    const element = document.querySelector(child)
+    element.style.backgroundImage = `url("${backgroundUrl}")`
+}
+
+
 export async function handleFilterChange(changeName, changeValue) {
     const url = new URL(window.location)
     url.searchParams.set(changeName, changeValue)

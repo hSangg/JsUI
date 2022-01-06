@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 import postApi from "./api/postApi";
 import { handleFilterChange, initPrecentation, initSearch, renderPagination, renderUI } from './utils';
+import showNoti from "./utils/showNoti";
 
 // use fromNow in dayJs 🥳
 dayjs.extend(relativeTime)
@@ -24,12 +25,13 @@ function initULR() {
 
 }
 
-
-
-
 // 🚄 main
 (async () => {
     try {
+        // show welcome message
+        showNoti.noti('welcome to my page')
+
+
         const parameter = initULR()
 
         initPrecentation({

@@ -20,6 +20,10 @@
   <!-- Use font Rubik -->
   <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet" />
 
+  <!-- ToastifyJs -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+
   <!-- Internal CSS -->
   <link rel="stylesheet" href="./styles/main.css" />
   <link rel="stylesheet" href="./styles/post-detail.css" />
@@ -56,7 +60,7 @@
       <div class="container">
         <div class="post-detail-main shadow-lg add-edit-post-form">
           <div class="post-title-wrapper">
-            <h1 id="postDetailTitle">Add edit a post</h1>
+            <h1 id="postDetailTitle">Edit Post</h1>
 
             <p>
               <small class="text-muted">Please enter the following information and submit
@@ -64,10 +68,10 @@
             </p>
           </div>
 
-          <form id="postForm" class="post-form">
+          <form id="postForm" class="post-form" novalidate>
             <div class="form-group">
               <label for="postTitle">Title</label>
-              <input type="text" class="form-control" name="title" placeholder="Eg: Hy! My name is Sang" />
+              <input type="text" class="form-control" name="title" placeholder="Eg: Hy! My name is Sang" required />
               <div class="invalid-feedback">
                 Ooops! Please write a nice title for your post &gt;.&lt;
               </div>
@@ -75,7 +79,7 @@
 
             <div class="form-group" style="margin: 1rem 0">
               <label for="postAuthor">Author</label>
-              <input type="text" class="form-control" name="author" placeholder="Eg: H_sangg" />
+              <input type="text" class="form-control" name="author" placeholder="Eg: H_sangg" required />
               <div class="invalid-feedback">
                 Please enter author of this post!
               </div>
@@ -84,7 +88,15 @@
             <div class="form-group" style="margin: 1rem 0">
               <label for="postDescription">Description</label>
               <textarea class="form-control" name="description" rows="3"></textarea>
-            </div>
+            </div>yanr
+
+            <input type="hidden" name="backgroundUrl" , value="">
+
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Open this select menu</option>
+              <option value="1">Random Image</option>
+              <option value="3">Upload Image </option>
+            </select>
 
             <div class="form-group" style="margin: 1rem 0">
               <label for="postChangeImage">Image</label>
@@ -96,8 +108,9 @@
               <h5 class="change-image">change image</h5>
             </div>
 
+
             <div class="text-center">
-              <button class="btn btn-outline-primary">
+              <button class="button-submit">
                 <i class="fas fa-save mr-1"></i> Save
               </button>
             </div>
@@ -113,6 +126,9 @@
 
   <!-- Scripts should be placed here to prevent blocking render UI -->
   <script src="./js/add-edit-post.js" type="module"></script>
+
+  <!-- Toastifyjs -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </body>
 
