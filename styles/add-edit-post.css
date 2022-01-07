@@ -57,3 +57,24 @@ label{
     color: rgb(82, 82, 255);
     box-shadow: inset 0 0 0 2px currentColor;
 }
+
+.button-submit.newStyle{
+    
+    opacity: 0.5;
+}
+
+.newStyle .submit-button-icon{
+    color:currentColor;
+    animation: rotate 1s infinite ease;
+
+}
+
+@keyframes rotate {
+    0%{
+        transform: rotate(0);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+

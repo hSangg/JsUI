@@ -13,12 +13,10 @@ async function handleSubmitForm(formValue) {
     //show noti
     showNoti.succ('update successfully')
 
-
-
     // move to post detail
-    setTimeout(() => {
-        window.location.assign(`/post-detail.html?id=${post.id}`)
-    }, 1500)
+    // setTimeout(() => {
+    //     window.location.assign(`/post-detail.html?id=${post.id}`)
+    // }, 1500)
 
 }
 
@@ -40,13 +38,6 @@ async function handleSubmitForm(formValue) {
             initialValue: post,
             onSubmit: handleSubmitForm
         })
-
-        const optionSelect = document.querySelector('.form-select')
-        optionSelect.onchange = (e) => {
-            console.log(optionSelect.value)
-        }
-
-
 
     } catch (error) {
         console.log(error)

@@ -1,10 +1,14 @@
 import * as yup from 'yup';
 import { string } from "yup";
 import { setBackgroundImage, setTextContent, setValue } from ".";
+import { getRandomImage } from '../constants/bannerListLink';
+
 
 
 //query sofast 🥵
 const $ = document.querySelector.bind(document);
+
+
 
 function getFormData(form) {
     if (!form) return
@@ -14,7 +18,7 @@ function getFormData(form) {
     for (const [name, values] of data) {
         formData[name] = values
     }
-
+    console.log(formData)
     return formData
 }
 
@@ -33,11 +37,13 @@ function setDefaultForm(form, post) {
 
 function getPostSchema() {
     return yup.object({
-        title: string().required('Điền tựa đề vào dùm cái🙏🙏🙏 ngu dốt 😏😏😏'),
-        author: string().required('Điền tác giả vô nhanh, khẩn trương🙏🙏🙏')
-            .test('uppercase first letter', 'viết hoa chữ cái đầu tên người đi, ngu à 😏', value => {
+        title: string().required('Please enter your title'),
+        author: string().required('Please enter your author')
+            .test('uppercase first letter', 'Uppercase the first letter of word', value => {
                 return value && value.split(' ').every(x => x[0].toUpperCase() === x[0])
-            })
+            }),
+        backgroundUrl: string().required('Please chose your background image').url('it need to be an url')
+
     })
 }
 
@@ -54,7 +60,7 @@ function setTextError(form, name, error) {
 
 async function validateForm(form, formValue) {
     //reset 
-    ['author', 'title'].forEach(x => setTextError(form, x, ''))
+    ['author', 'title', 'backgroundUrl'].forEach(x => setTextError(form, x, ''))
 
     try {
         const schema = getPostSchema()
@@ -64,7 +70,7 @@ async function validateForm(form, formValue) {
         return true;
 
     } catch (error) {
-        console.log('error: ', error);
+
 
         const errorName = {}
 
@@ -72,14 +78,41 @@ async function validateForm(form, formValue) {
             if (errorName[path]) continue
             setTextError(form, path, message)
             errorName[path] = true
-            console.log(errorName)
+
         }
     }
 
-
-
     const isValid = form.checkValidity()
     if (!isValid) form.classList.add('was-validated')
+}
+
+function showLoading(form) {
+    const button = $(form).querySelector('.button-submit')
+    button.classList.add('newStyle')
+    button.innerHTML = '<i class="far fa-spinner-third submit-button-icon"></i> Saving'
+
+}
+
+
+function hideLoading(form) {
+    const button = $(form).querySelector('.button-submit')
+    button.classList.remove('newStyle')
+    button.textContent = 'Save'
+
+}
+
+function initBanner(form) {
+    // get new banner
+    // update url to hide input, set banner to UI
+    const randomButton = $('.change-image')
+    if (!randomButton) return
+
+    randomButton.addEventListener('click', () => {
+        const imageUrl = getRandomImage()
+        setBackgroundImage(document, '#postHeroImage', imageUrl)
+        setValue(form, '[name="backgroundUrl"]', imageUrl)
+    })
+
 }
 
 export function handlePostForm({ form, initialValue, onSubmit }) {
@@ -88,13 +121,41 @@ export function handlePostForm({ form, initialValue, onSubmit }) {
 
     setDefaultForm(formElement, initialValue)
 
+    //init banner
+    initBanner(formElement)
+
+    let isSummit = false;
+
     formElement.addEventListener('submit', async (e) => {
         e.preventDefault()
+
+        //show loading
+        showLoading(form)
+
+        //prevent submit continuous 
+        if (isSummit) return
+
+
         // get form data
         const data = getFormData(formElement)
         const isValid = await validateForm(formElement, data)
-        if (isValid) onSubmit(data)
+
+
+
+
+        if (!isValid) {
+            hideLoading(form)
+            isSummit = false
+            return;
+        }
+
+        await onSubmit?.(data)
+        //hide loading
+        hideLoading(form)
+        isSummit = false
 
     })
+
+
 
 }
