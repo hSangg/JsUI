@@ -78,3 +78,22 @@ label{
     }
 }
 
+input[id="uploadImage"] {
+    display: none;
+}
+
+.input-upload-file{
+    color:white;
+    padding: 0.3rem 0.6rem;
+    background-color: #834bff;
+
+    box-shadow: inset 2px 2px 0px 1px rgba(255, 255, 255, 0.411);
+}
+
+.input-upload-file .icon {
+    margin-right: 10px;
+}
+
+.input-upload-file:hover{
+    filter: brightness(1.2);
+}

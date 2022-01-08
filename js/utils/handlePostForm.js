@@ -1,5 +1,7 @@
 import * as yup from 'yup';
+import { object } from 'yup';
 import { string } from "yup";
+import { mixed } from 'yup';
 import { setBackgroundImage, setTextContent, setValue } from ".";
 import { getRandomImage } from '../constants/bannerListLink';
 
@@ -7,8 +9,6 @@ import { getRandomImage } from '../constants/bannerListLink';
 
 //query sofast 🥵
 const $ = document.querySelector.bind(document);
-
-
 
 function getFormData(form) {
     if (!form) return
@@ -18,7 +18,7 @@ function getFormData(form) {
     for (const [name, values] of data) {
         formData[name] = values
     }
-    console.log(formData)
+
     return formData
 }
 
@@ -42,7 +42,20 @@ function getPostSchema() {
             .test('uppercase first letter', 'Uppercase the first letter of word', value => {
                 return value && value.split(' ').every(x => x[0].toUpperCase() === x[0])
             }),
-        backgroundUrl: string().required('Please chose your background image').url('it need to be an url')
+        imageSource: string().oneOf(['usingUnplash', 'uploadFromComputer'], 'invalid value'),
+        backgroundUrl: string().when('imageSource', {
+            is: "usingUnplash",
+            then: string().required('Please choose your background').url('it should be an url')
+        }),
+
+        // 🙏
+        image: mixed().when('imageSource', {
+            is: "uploadFromComputer",
+            then: mixed()
+                .test('upload file plase', 'Please upload your file', (value) => value?.name)
+                .test('limited size', 'Please choose file whose size is smaller than 50MB', (value) => value?.size < 50000000)
+        }),
+
 
     })
 }
@@ -60,28 +73,22 @@ function setTextError(form, name, error) {
 
 async function validateForm(form, formValue) {
     //reset 
-    ['author', 'title', 'backgroundUrl'].forEach(x => setTextError(form, x, ''))
+    ['author', 'title', 'backgroundUrl', 'image', 'imageSource'].forEach(x => setTextError(form, x, ''))
 
     try {
         const schema = getPostSchema()
         await schema.validate(formValue, { abortEarly: false })
-
-
         return true;
 
     } catch (error) {
-
-
         const errorName = {}
 
         for (const { path, message } of error.inner) {
             if (errorName[path]) continue
             setTextError(form, path, message)
             errorName[path] = true
-
         }
     }
-
     const isValid = form.checkValidity()
     if (!isValid) form.classList.add('was-validated')
 }
@@ -115,6 +122,45 @@ function initBanner(form) {
 
 }
 
+function handelMatchValue(form, value) {
+    const uploadMethod = form.querySelectorAll('.option-upload')
+    if (!uploadMethod) return
+
+    uploadMethod.forEach(x => {
+        x.hidden = x.dataset.method !== value
+    })
+
+}
+
+function chooseUploadMethod(form) {
+    const uploadList = form.querySelectorAll('[name="imageSource"]')
+    const uploadMethod = form.querySelectorAll('.option-upload')
+
+    uploadList.forEach((x, i) => {
+        if (!x.checked) uploadMethod[i].classList.add('d-none')
+
+        x.addEventListener('change', (e) => {
+            uploadMethod[i].classList.remove('d-none')
+            handelMatchValue(form, e.target.value)
+        })
+    })
+}
+
+function initBackground(form) {
+    const inputBackground = form.querySelector('[name="image"]')
+    if (!inputBackground) return
+
+    inputBackground.addEventListener('change', (e) => {
+        const image = e.target.files[0]
+        const imageUrl = URL.createObjectURL(image)
+
+        //render image to UI
+        setBackgroundImage(document, '#postHeroImage', imageUrl)
+
+
+    })
+}
+
 export function handlePostForm({ form, initialValue, onSubmit }) {
     const formElement = $(form)
     if (!formElement) return
@@ -124,38 +170,29 @@ export function handlePostForm({ form, initialValue, onSubmit }) {
     //init banner
     initBanner(formElement)
 
+    chooseUploadMethod(formElement)
     let isSummit = false;
+
+    // handle upload file from my pc
+    initBackground(formElement)
+
 
     formElement.addEventListener('submit', async (e) => {
         e.preventDefault()
 
         //show loading
         showLoading(form)
-
         //prevent submit continuous 
         if (isSummit) return
-
-
         // get form data
         const data = getFormData(formElement)
         const isValid = await validateForm(formElement, data)
 
+        if (isValid) await onSubmit?.(data)
 
-
-
-        if (!isValid) {
-            hideLoading(form)
-            isSummit = false
-            return;
-        }
-
-        await onSubmit?.(data)
         //hide loading
         hideLoading(form)
         isSummit = false
 
     })
-
-
-
 }

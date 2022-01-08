@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import postApi from "./api/postApi";
-import { pictureUrl } from "./constants/bannerListLink.js";
+import { getRandomImage, pictureUrl } from "./constants/bannerListLink.js";
 import { resignterLightBox, setTextContent } from "./utils";
 
 
@@ -10,6 +10,7 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 function renderUiPost(post) {
+    console.log('post: ', post);
     //selector
     const postDetailElement = $('.post-detail')
     if (!postDetailElement) return
@@ -20,7 +21,7 @@ function renderUiPost(post) {
     if (!imageElement) return
     imageElement.src = post.imageUrl
     imageElement.addEventListener('error', () => {
-        imageElement.src = `https://images.unsplash.com/photo-1536107026912-d993e101312f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80`
+        imageElement.src = getRandomImage()
     })
 
     setTextContent(postDetailElement, '#postDetailAuthor', `${post.author} - `)
@@ -29,7 +30,7 @@ function renderUiPost(post) {
     // change banner 
     const bannerElement = $('#postHeroImage')
     if (!bannerElement) return
-    bannerElement.style.backgroundImage = `url(${pictureUrl})`;
+    bannerElement.style.backgroundImage = `url(${post.backgroundUrl || post.imageUrl})`;
 
     const gotoEditPageLinkElement = $('#goToEditPageLink')
     if (!gotoEditPageLinkElement) return;

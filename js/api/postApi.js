@@ -25,9 +25,21 @@ const postApi = {
         const url = '/posts'
         return axiosCilent.post(url, data)
     },
+    addFormData(data) {
+        const url = '/with-thumbnail/posts'
+        return axiosCilent.post(url, data, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+    },
     update(data) {
         const url = `/posts/${data.id}`
         return axiosCilent.patch(url, data)
+    },
+    updateFormData(data) {
+        const url = `/with-thumbnail/posts/${data.get('id')}`
+        return axiosCilent.patch(url, data, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
     },
     remove(id) {
         const url = `/posts/${id}`
