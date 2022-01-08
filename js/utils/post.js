@@ -49,12 +49,26 @@ export function createLiElement(post) {
             window.location.assign(`/post-detail.html?id=${post.id}`)
         })
 
+        //edit button
         const buttonEdit = liElement.querySelector('[data-id="edit"]')
         if (!buttonEdit) return
 
         buttonEdit.addEventListener('click', () => {
-
             window.location.assign(`/add-edit-post.html?id=${post.id}`)
+        })
+
+        //delete button
+        const buttonRemove = liElement.querySelector('[data-id="remove"]')
+        if (!buttonRemove) return
+
+        buttonRemove.addEventListener('click', () => {
+            const event = new CustomEvent('post-remove', {
+                bubbles: true,
+                detail: post
+            })
+
+            buttonRemove.dispatchEvent(event)
+
         })
 
         return liElement

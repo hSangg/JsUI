@@ -25,14 +25,54 @@ function initULR() {
 
 }
 
+function showLoading() {
+    const planetElement = $('.planet')
+    planetElement.classList.remove('hide')
+    planetElement.classList.add('show')
+
+}
+
+function hideLoading() {
+    const planetElement = $('.planet')
+    planetElement.classList.remove('show')
+    planetElement.classList.add('hide')
+}
+
+async function handleDeletePost() {
+    try {
+        document.addEventListener('post-remove', (event) => {
+            const myModal = new bootstrap.Modal($('#modal-confirm-delete'))
+            myModal.show()
+
+            const yesButton = $('.modal__button-confirm')
+            if (!yesButton) return
+
+            yesButton.onclick = async () => {
+                showLoading()
+
+                const postId = event.detail.id
+                await postApi.remove(postId)
+
+                hideLoading()
+                myModal.hide()
+                await handleFilterChange()
+            }
+
+
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 // 🚄 main
 (async () => {
     try {
         // show welcome message
         showNoti.noti('welcome to my page')
-
-
         const parameter = initULR()
+
+        handleDeletePost()
 
         initPrecentation({
             element: "#postsPagination",

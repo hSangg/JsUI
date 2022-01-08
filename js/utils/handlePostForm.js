@@ -146,6 +146,25 @@ function chooseUploadMethod(form) {
     })
 }
 
+async function initUploadChange(form, formValue, name) {
+    try {
+        setTextError(form, name, '')
+
+        const schema = getPostSchema()
+        await schema.validateAt(name, formValue)
+
+        const field = form.querySelector(`[name="${name}"]`)
+
+        if (field && !field.checkValidity()) field.classList.add('was-validited')
+
+
+    } catch (error) {
+        setTextError(form, name, error.message)
+    }
+
+
+}
+
 function initBackground(form) {
     const inputBackground = form.querySelector('[name="image"]')
     if (!inputBackground) return
@@ -157,7 +176,27 @@ function initBackground(form) {
         //render image to UI
         setBackgroundImage(document, '#postHeroImage', imageUrl)
 
+        //validate background image after choosing
+        initUploadChange(form, {
+            imageSource: 'uploadFromComputer',
+            image,
+        },
+            'image')
 
+
+
+    })
+}
+
+function validateOnChange(form) {
+    ['title', 'author'].forEach(name => {
+        const field = form.querySelector(`[name = "${name}"]`)
+
+        field.oninput = (e) => {
+            const newValue = e.target.value
+
+            initUploadChange(form, { [name]: newValue }, [name])
+        }
     })
 }
 
@@ -165,6 +204,7 @@ export function handlePostForm({ form, initialValue, onSubmit }) {
     const formElement = $(form)
     if (!formElement) return
 
+    validateOnChange(formElement)
     setDefaultForm(formElement, initialValue)
 
     //init banner
